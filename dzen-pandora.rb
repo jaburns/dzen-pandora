@@ -4,19 +4,21 @@ require 'uri'
 
 PORT = 1338
 
-CURL = "^ca(1,curl http://localhost:#{PORT}/click%7c"
-BUTTON = "   "
+def make_button (action, image)
+  icon_path = '/'+File.expand_path($0).split('/')[1..-2].join('/')+'/icons/'
+  "^ca(1,curl http://localhost:#{PORT}/click%7c#{action}) ^i(#{icon_path}#{image}.xbm) ^ca()"
+end
 
-PLAY = "^bg(green)#{CURL}play)#{BUTTON}^ca()^bg()"
-UP   = "^bg(blue)#{CURL}up)#{BUTTON}^ca()^bg()"
-DOWN = "^bg(red)#{CURL}down)#{BUTTON}^ca()^bg()"
-SKIP = "^bg(yellow)#{CURL}skip)#{BUTTON}^ca()^bg()"
+PLAY = make_button 'play', 'pause'
+UP   = make_button 'up',   'thumbsup'
+DOWN = make_button 'down', 'thumbsdown'
+SKIP = make_button 'skip', 'skip'
 
 $action_queue = ''
 
 def pandora (song, artist, album, liked)
-  color = liked == 'true' ? 'cyan' : 'white'
-  $stdout.puts "^fg(#{color})#{artist} - #{song}   ^fg()#{PLAY}#{UP}#{DOWN}#{SKIP}"
+  color = liked == 'true' ? '^fg(#cb4b16)' : ''
+  $stdout.puts "#{artist} - #{song}  #{DOWN}#{color}#{UP}^fg()#{PLAY}#{SKIP}"
   $stdout.flush
   retval = $action_queue
   $action_queue = ''
