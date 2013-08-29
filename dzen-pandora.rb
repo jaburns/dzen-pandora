@@ -31,7 +31,7 @@ def click (action)
   $action_queue = action
 end
 
-puts "...Pandora...\n"
+puts "...Pandora..."
 $stdout.flush
 
 webserver = TCPServer.new('localhost', PORT)
