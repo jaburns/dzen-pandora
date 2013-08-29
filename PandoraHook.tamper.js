@@ -3,7 +3,7 @@
 // @namespace   http://jaburns.net/
 // @match       http://www.pandora.com/
 // @description Notifies a local http server of the current song, and interprets
-//              the server's response to control playback. 
+//              the server's response to control playback.
 // ==/UserScript==
 
 var PORT  = 1338;
@@ -13,16 +13,16 @@ setInterval (update, DELAY);
 
 function update ()
 {
-    var songInfo = 
+    var songInfo =
         [ "playerBarSong",
           "playerBarArtist",
           "playerBarAlbum" ]
         .map (function (s) { return elem (s) .innerText })
         .join ("|");
-    
+
     var liked = elem ("thumbUpButton") .classList.contains ("indicator");
-    
-    hitServer ("pandora|"+songInfo+"|"+liked)
+
+    hitServer ("pandora|"+songInfo+"|"+liked+"|"+isPlaying());
 }
 
 function hitServer (request)
@@ -40,7 +40,10 @@ function handleResponse (result)
         case "up":   click (elem ("thumbUpButton"));   break;
         case "down": click (elem ("thumbDownButton")); break;
         case "skip": click (elem ("skipButton"));      break;
-        case "play": click (elem (isPlaying () ? "pauseButton" : "playButton"));
+        case "pause":
+        case "play":
+            click (elem (isPlaying () ? "pauseButton" : "playButton"));
+            setTimeout (update, 50);
             break;
     }
 }
@@ -60,3 +63,4 @@ function click (elem)
                           false, false, true, false, 0, null);
     elem.dispatchEvent (evObj);
 }
+
