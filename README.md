@@ -8,3 +8,7 @@ main = do
     xmonad defaultConfig
 ```
 
+![Screenshot](https://raw.github.com/jeremyaburns/dzen-pandora/master/screen1.png)
+
+![Screenshot](https://raw.github.com/jeremyaburns/dzen-pandora/master/screen2.png)
+
