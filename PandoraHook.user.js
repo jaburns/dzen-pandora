@@ -13,6 +13,8 @@ setInterval (update, DELAY);
 
 function update ()
 {
+    click (elem ("still_listening"));
+
     var songInfo =
         [ "playerBarSong",
           "playerBarArtist",
@@ -53,11 +55,13 @@ function elem (className) {
 }
 
 function isPlaying () {
-    return elem ("playButton").style.display == "none";
+    return elem ("playButton").style.display === "none";
 }
 
 function click (elem)
 {
+    if (!elem) return;
+    
     var evObj = document.createEvent ("MouseEvents");
     evObj.initMouseEvent ("click", true, true, window, 1, 12, 345, 7, 220,
                           false, false, true, false, 0, null);
