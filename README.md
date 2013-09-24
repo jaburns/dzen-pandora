@@ -31,6 +31,5 @@ main = do
 
 ##### TODO
 
-- Song progress display.
 - Support for old versions of dzen by disabling the buttons.
 - Better handling of missing Pandora connection.
