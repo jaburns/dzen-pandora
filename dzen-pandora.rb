@@ -17,10 +17,27 @@ SKIP  = make_button 'skip'
 
 $action_queue = ''
 
-def pandora (song, artist, album, liked, playing)
+def pandora (song, artist, album, liked, playing, progress)
   color = liked   == 'true' ? '^fg(#cb4b16)' : ''
   play  = playing == 'true' ? PAUSE : PLAY
-  puts "#{artist} - #{song}  #{DOWN}#{color}#{UP}^fg()#{play}#{SKIP}"
+
+  title = "#{artist} - #{song}"
+
+  # Figure out which character is the playhead.  TODO: break in to function, fix playhead starting at end.
+  playhead_nospace = (Integer(progress) / 100.0001 * title.gsub(/\s+/,'').length).floor
+  count_nospace = 0
+  playhead = 0
+  title.split('').each do |c|
+    playhead += 1
+    count_nospace += 1 if c != ' '
+    break if count_nospace == playhead_nospace
+  end
+  title = " #{title}"
+  playhead = 1 if playhead < 1
+
+  title_with_playhead = "#{title[0..(playhead-1)]}^fg(#eb6b36)#{title[playhead]}^fg()#{title[(playhead+1)..-1]}"
+  puts "#{title_with_playhead}  #{DOWN}#{color}#{UP}^fg()#{play}#{SKIP}"
+
   $stdout.flush
   retval = $action_queue
   $action_queue = ''

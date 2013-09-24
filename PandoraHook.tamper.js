@@ -22,7 +22,13 @@ function update ()
 
     var liked = elem ("thumbUpButton") .classList.contains ("indicator");
 
-    hitServer ("pandora|"+songInfo+"|"+liked+"|"+isPlaying());
+    var elapsed   = getSeconds ("elapsedTime");
+    var remaining = getSeconds ("remainingTime");
+    var progress  = Math.floor (100 * elapsed / (remaining + elapsed));
+
+    if (! progress) progress = 0;
+
+    hitServer ("pandora|"+songInfo+"|"+liked+"|"+isPlaying()+"|"+progress);
 }
 
 function hitServer (request)
@@ -48,6 +54,11 @@ function handleResponse (result)
     }
 }
 
+function getSeconds (className) {
+    var minSec = elem (className).innerText.replace('-','').split(':');
+    return 60.0 * parseFloat (minSec[0]) + parseFloat (minSec[1]);
+}
+
 function elem (className) {
     return document.getElementsByClassName (className) [0];
 }
@@ -63,4 +74,3 @@ function click (elem)
                           false, false, true, false, 0, null);
     elem.dispatchEvent (evObj);
 }
-
